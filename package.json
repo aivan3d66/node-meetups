@@ -1,0 +1,40 @@
+{
+  "name": "meetups",
+  "version": "1.0.0",
+  "description": "Node.js + PostgreSQL",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aivan3d66/meetups.git"
+  },
+  "homepage": "https://github.com/aivan3d66/meetups#readme",
+  "keywords": [
+    "Node.js",
+    "Express",
+    "JWT",
+    "PostgreSQL"
+  ],
+  "engines": {
+    "node": "22.x"
+  },
+  "author": "aivan3d66",
+  "license": "ISC",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "2.4.3",
+    "dotenv": "16.4.5",
+    "express": "4.21.1",
+    "express-session": "1.18.1",
+    "joi": "17.13.3",
+    "jsonwebtoken": "9.0.2",
+    "pg": "8.13.0",
+    "uuid": "10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.7",
+    "prettier": "3.3.3"
+  }
+}
