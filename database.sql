@@ -13,7 +13,7 @@ create TABLE meetups
     title       VARCHAR(255),
     description VARCHAR(1000),
     tags        VARCHAR(100),
-    dateTime    date,
+    date_time    date,
     location    VARCHAR(100),
     user_id     INTEGER,
     FOREIGN KEY (user_id) REFERENCES users (id)

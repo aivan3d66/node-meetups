@@ -7,7 +7,7 @@ exports.meetupValidation = (data) => {
         title: Joi.string().min(10).max(500).required(),
         description: Joi.string().min(100).max(3000).required(),
         tags: defaultRequiredString,
-        dateTime: defaultRequiredString,
+        date_time: defaultRequiredString,
         location: defaultRequiredString,
         user_id: Joi.string().required(),
     })
