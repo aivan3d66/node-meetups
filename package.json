@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "Node.js + PostgreSQL",
   "main": "server.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/aivan3d66/meetups.git"
-  },
-  "homepage": "https://github.com/aivan3d66/meetups#readme",
   "keywords": [
     "Node.js",
     "Express",
