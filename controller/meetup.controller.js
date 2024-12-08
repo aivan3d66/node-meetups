@@ -11,16 +11,16 @@ class MeetupController {
             })
         }
 
-        const { title, description, tags, dateTime, location, user_id } =
+        const { title, description, tags, date_time, location, user_id } =
             req.body
         const newMeetup = await db.query(
-            `INSERT INTO meetups (title, description, tags, dateTime, location, user_id)
-                                          VALUES ($1, $2, $3, $4, $5, $6)
-                                          RETURNING *`,
-            [title, description, tags, dateTime, location, user_id]
+            `INSERT INTO meetups (title, description, tags, date_time, location, user_id)
+             VALUES ($1, $2, $3, $4, $5, $6)
+             RETURNING *`,
+            [title, description, tags, date_time, location, user_id]
         )
 
-        res.json(newMeetup.rows)
+        res.json(newMeetup.rows[0])
     }
 
     async getMeetupById(req, res) {
@@ -63,42 +63,41 @@ class MeetupController {
             )
 
             res.json(meetup.rows)
+        } else if (perPage && (page || page === 0)) {
+            const pageableMeetups = await db.query(
+                `
+                    SELECT *
+                    FROM meetups
+                    ORDER BY meetups.id ASC
+                    LIMIT ${perPage} OFFSET ${page === 0 ? page : page * 2}
+                `
+            )
+
+            res.json({ meetups: pageableMeetups.rows })
         } else {
-            if (perPage && (page || page === 0)) {
-                const pageableMeetups = await db.query(
-                    `
-                        SELECT *
-                        FROM   meetups
-                        ORDER BY meetups.id ASC
-                        LIMIT  ${perPage}
-                        OFFSET ${page === 0 ? page : page * 2}
-                    `
-                )
+            const meetups = await db.query('SELECT * FROM meetups')
 
-                res.json({ meetups: pageableMeetups.rows })
-            } else {
-                const meetups = await db.query('SELECT * FROM meetups')
-
-                res.json(meetups.rows)
-            }
+            res.json(meetups.rows)
         }
     }
 
     async updateMeetup(req, res) {
-        const { error } = meetupValidation(req.body)
-
-        if (error) {
-            return res.status(400).json({
-                message: `Validation error during updating meetup: ${error.details[0].message}`,
-            })
-        }
-
-        const { title, description, tags, dateTime, location, user_id } =
-            req.body
         const id = req.params.id
+
+        const { title, description, tags, date_time, location, user_id } =
+            req.body
+
         const meetup = await db.query(
-            'UPDATE meetups set title = $1, description = $2, tags = $3, dateTime = $4, location = $5, user_id = $6 where id = $7 RETURNING *',
-            [title, description, tags, dateTime, location, user_id, id]
+            `UPDATE meetups
+             set title       = COALESCE($1, title),
+                 description = COALESCE($2, description),
+                 tags        = COALESCE($3, tags),
+                 date_time   = COALESCE($4, date_time),
+                 location    = COALESCE($5, location),
+                 user_id     = COALESCE($6, user_id)
+             where id = $7
+             RETURNING *`,
+            [title, description, tags, date_time, location, user_id, id]
         )
 
         res.json(meetup.rows[0])

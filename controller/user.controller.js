@@ -37,7 +37,12 @@ class UserController {
     async updateUser(req, res) {
         const { id, username, email, password, roles } = req.body
         const user = await db.query(
-            'UPDATE users set username = $1, email = $2, password = $3, roles = $4 where id = $5 RETURNING *',
+            `UPDATE users 
+                set username = COALESCE($1, username), 
+                    email = COALESCE($2, email), 
+                    password = COALESCE($3, password), 
+                    roles = COALESCE($4, roles) 
+                where id = $5 RETURNING *`,
             [username, email, password, roles, id]
         )
 
